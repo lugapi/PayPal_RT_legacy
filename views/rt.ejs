@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<style>
+    pre {
+        overflow: overlay;
+        background-color: ghostwhite;
+        border: 1px solid silver;
+        padding: 10px 20px;
+        margin: 20px;
+        border-radius: 4px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
+<body class="font-sans antialiased bg-gray-100 dark:bg-gray-800">
+    <main class="container mx-auto mt-6">
+        <section class="flex flex-col">
+            <h3 class="text-xl font-semibold mb-2">Step 1: Create BA token + Approve URL</h3>
+            <div class="flex flex-col sm:flex-row gap-5 py-4">
+                <form id="step1Form" method="post">
+                    <textarea name="jsonToSend" cols="50" rows="30"
+                        class="w-full rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
+                        {
+                            "description": "Billing Agreement",
+                            "shipping_address":
+                            {
+                              "line1": "1350 North First Street",
+                              "city": "San Jose",
+                              "state": "CA",
+                              "postal_code": "95112",
+                              "country_code": "US",
+                              "recipient_name": "John Doe"
+                            },
+                            "payer":
+                            {
+                              "payment_method": "PAYPAL"
+                            },
+                            "plan":
+                            {
+                              "type": "MERCHANT_INITIATED_BILLING",
+                              "merchant_preferences":
+                              {
+                                "return_url": "https://example.com/return",
+                                "cancel_url": "https://example.com/cancel",
+                                "notify_url": "https://example.com/notify",
+                                "accepted_pymt_type": "INSTANT",
+                                "skip_shipping_address": false,
+                                "immutable_shipping_address": true
+                              }
+                            }
+                          }
+                </textarea>
+                    <button id="submitStep1" type="submit"
+                        class="mt-2 inline-flex items-center px-4 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-white hover:bg-indigo-600 focus:outline-none focus:border-indigo-700 focus:ring-indigo-500">
+                        Go
+                    </button>
+
+                </form>
+                <section id="responseStep1" class="hidden">
+                    <pre></pre>
+                    <a href="" target="_blank" id="approvalLink"
+                        class="text-blue-600 hover:text-blue-800 hidden">Approve BA</a>
+                </section>
+            </div>
+        </section>
+
+        <section class="flex flex-col">
+            <div id="step2" class="py-4 bg-gray-100 hidden">
+                <h3 class="text-xl font-semibold mb-2">Step 2: Create BA after approval</h3>
+                <p class="font-semibold text-red-600 italic">(Approve the BA before submitting)</p>
+                <div class="flex flex-col sm:flex-row gap-5">
+                    <form id="step2Form" method="post">
+                        <input type="text" id="token_id" name="id" value=""
+                            class="w-full rounded border-gray-300 mb-2 focus:border-indigo-500 focus:ring-indigo-500">
+                        <button id="btnStep2" type="submit"
+                            class="inline-flex items-center px-4 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-white hover:bg-indigo-600 focus:outline-none focus:border-indigo-700 focus:ring-indigo-500">
+                            Create
+                        </button>
+                    </form>
+                    <div id="responseStep2" class="step2Result hidden">
+                        <pre></pre>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <div id="step3" class="py-4 bg-gray-100 hidden">
+            <h3 class="text-xl font-semibold mb-2">Step 3: Create transaction based on the billing agreement</h3>
+            <div class="flex flex-col sm:flex-row gap-5">
+
+                <form id="step3Form" method="post">
+                    <textarea id="jsonToSendTransaction" name="jsonToSendTransaction" cols="50" rows="80"
+                        class="w-full rounded border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"></textarea>
+                    <button type="submit" id="btnStep3"
+                        class="mt-2 inline-flex items-center px-4 py-2 bg-indigo-500 border border-transparent rounded-md font-semibold text-white hover:bg-indigo-600 focus:outline-none focus:border-indigo-700 focus:ring-indigo-500">
+                        Create
+                    </button>
+                </form>
+                <div id="step3Result" class="mt-4 flex-grow hidden">
+                    <pre></pre>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script src="./rt.js"></script>
+    <script src="./commonFront.js"></script>
+</body>
+
+</html>
