@@ -5,14 +5,12 @@ const dotenv = require('dotenv');
 const path = require('path');
 const app = express();
 
+dotenv.config();
+
 app.use(express.static("public"));
 app.use(express.json());
 app.set("view engine", "ejs");
 app.set("views", path.join("views"));
-
-const {
-    PORT
-} = dotenv.config().parsed;
 
 app.get('/', async (req, res) => {
     res.render('rt', {
@@ -119,6 +117,6 @@ app.post('/transactionOnBA', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Node server listening at http://localhost:${PORT}/`);
+app.listen(process.env.PORT, () => {
+    console.log(`Node server listening at http://localhost:${process.env.PORT}/`);
 });
